@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item
+        android:id="@+id/nav_add"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="Toevoegen" />
+
+    <item
+        android:id="@+id/nav_borrowed_others"
+        android:icon="@drawable/ic_folder_special_black_24dp"
+        android:title="Geleende items" />
+
+    <item
+        android:id="@+id/nav_borrowed_me"
+        android:icon="@drawable/ic_folder_shared_black_24dp"
+        android:title="Mijn items" />
 </menu>
