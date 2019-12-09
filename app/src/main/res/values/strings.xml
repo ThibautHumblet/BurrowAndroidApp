@@ -21,4 +21,12 @@
     <string name="invalid_password">Password must be >5 characters</string>
 
     <string name="login_failed">"Login failed"</string>
+
+    <!-- Add Item -->
+    <string-array name="type_array">
+        <item>Money</item>
+        <item>Electronics</item>
+        <item>Utilities</item>
+        <item>Food/Drinks</item>
+    </string-array>
 </resources>
