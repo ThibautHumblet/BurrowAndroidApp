@@ -33,4 +33,11 @@
     <string name="confirm_password">Confirm password</string>
     <string name="change_password_positive">Confirm</string>
     <string name="change_password_negative">Cancel</string>
+
+    <!-- Add screen -->
+    <string name="add_coupon">Add coupon</string>
+    <string name="coupon_name">Coupon name</string>
+    <string name="end_date">End date</string>
+    <string name="notify_date">Notify date</string>
+    <string name="choose_image">Choose image</string>
 </resources>
