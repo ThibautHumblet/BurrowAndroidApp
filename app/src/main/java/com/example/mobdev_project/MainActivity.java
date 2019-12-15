@@ -4,14 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new BorrowedOthersFragment()).commit();
     }
 
 
@@ -39,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_borrowed_me:
                     selectedFragment = new BorrowedMeFragment();
-                    break;
-                case R.id.nav_borrowed_others:
-                    selectedFragment = new BorrowedOthersFragment();
                     break;
                 case R.id.nav_account:
                     selectedFragment = new AccountFragment();

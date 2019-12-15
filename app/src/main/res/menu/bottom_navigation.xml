@@ -7,11 +7,6 @@
         android:title="Toevoegen" />
 
     <item
-        android:id="@+id/nav_borrowed_others"
-        android:icon="@drawable/ic_folder_special_black_24dp"
-        android:title="Geleende items" />
-
-    <item
         android:id="@+id/nav_borrowed_me"
         android:icon="@drawable/ic_folder_shared_black_24dp"
         android:title="Mijn items" />
