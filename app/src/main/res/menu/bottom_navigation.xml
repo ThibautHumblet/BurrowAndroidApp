@@ -15,4 +15,9 @@
         android:id="@+id/nav_borrowed_me"
         android:icon="@drawable/ic_folder_shared_black_24dp"
         android:title="Mijn items" />
+
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="Account"/>
 </menu>

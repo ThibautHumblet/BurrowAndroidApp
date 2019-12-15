@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_borrowed_others:
                     selectedFragment = new BorrowedOthersFragment();
                     break;
+                case R.id.nav_account:
+                    selectedFragment = new AccountFragment();
             }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();

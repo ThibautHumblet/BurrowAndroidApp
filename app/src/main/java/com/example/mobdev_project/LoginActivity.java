@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.txtPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
-        btnGoogleLogin = findViewById(R.id.btnLoginGoogle);
         progressBar = findViewById(R.id.loginProgressBar);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             LoginUser();
                         } else {
-                            Toast.makeText(getApplicationContext(), "Registration failed!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
                             Log.w("Auth ERROR: ", "Error registering user.", task.getException());
                         }
