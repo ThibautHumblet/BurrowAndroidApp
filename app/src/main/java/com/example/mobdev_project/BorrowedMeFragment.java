@@ -43,7 +43,9 @@ public class BorrowedMeFragment extends Fragment {
                                 Log.d("Firestore data: ", document.getId() + " => " + document.getData());
 
                                 TextView text = view.findViewById(R.id.my_items);
-                                text.setText(document.getString("lol"));
+                                if (text != null) {
+                                    text.setText(document.getString("lol"));
+                                }
                             }
                         } else {
                             Log.w("Firestore ERROR: ", "Error getting documents.", task.getException());
