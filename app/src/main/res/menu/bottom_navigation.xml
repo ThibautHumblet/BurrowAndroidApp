@@ -4,15 +4,15 @@
     <item
         android:id="@+id/nav_add"
         android:icon="@drawable/ic_add_black_24dp"
-        android:title="Toevoegen" />
+        android:title="@string/navbar_add" />
 
     <item
         android:id="@+id/nav_borrowed_me"
         android:icon="@drawable/ic_folder_shared_black_24dp"
-        android:title="Mijn items" />
+        android:title="@string/navbar_coupons" />
 
     <item
         android:id="@+id/nav_account"
         android:icon="@drawable/ic_account_circle_black_24dp"
-        android:title="Account"/>
+        android:title="@string/navbar_account"/>
 </menu>
