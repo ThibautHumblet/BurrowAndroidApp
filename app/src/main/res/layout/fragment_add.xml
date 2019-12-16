@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/gradient">
 
-    <Button
-        android:id="@+id/button1"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddCoupon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:onClick="launchAddMine"
