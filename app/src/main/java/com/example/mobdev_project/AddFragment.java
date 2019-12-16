@@ -52,9 +52,6 @@ public class AddFragment extends Fragment {
     private Button btnAddCoupon;
     private ProgressBar pbAddCoupon;
 
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
-
     private Date ExpireDate;
     private Date NotifyDate;
 
@@ -75,9 +72,6 @@ public class AddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
     }
 
     @Override
