@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@drawable/gradient">
+    android:padding="16dp">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddCoupon"
@@ -13,11 +12,13 @@
         android:layout_height="wrap_content"
         android:onClick="launchAddMine"
         android:text="@string/add_coupon"
+        android:textColor="@color/colorText"
+        app:backgroundTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txtCouponName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,9 +30,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgCoupon" />
+        app:layout_constraintTop_toBottomOf="@+id/imgCoupon"
+        android:textColor="@color/colorText"/>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txtEndDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -43,6 +45,8 @@
         android:focusable="false"
         android:hint="@string/end_date"
         android:inputType="date"
+        android:textColor="@color/colorText"
+        android:textColorLink="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtCouponName" />
@@ -73,11 +77,13 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnChooseImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/choose_image"
+        android:textColor="@color/colorText"
+        app:backgroundTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/imgCoupon"
         app:layout_constraintStart_toStartOf="parent" />
 
