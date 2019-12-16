@@ -14,11 +14,32 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 public class Database {
-    private static FirebaseAuth auth = FirebaseAuth.getInstance();
-    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private FirebaseStorage storage;
 
-    public static Task<Void> CreateCoupon(final Coupon coupon) {
+    private static Database singleInstance;
+
+    private Database() {
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+    }
+
+    public static Database getInstance() {
+        if (singleInstance == null) {
+            singleInstance = new Database();
+        }
+
+        return singleInstance;
+    }
+
+    /**
+     * Creates a coupon in Firestore and uploads the image to Firebase Storage.
+     * @param coupon The coupon to upload.
+     * @return The Firestore task.
+     */
+    public Task<Void> CreateCoupon(final Coupon coupon) {
         String uid = auth.getCurrentUser().getUid();
         Uri imageUri = Uri.parse(coupon.ImageFile.toURI().toString());
         String imageName = imageUri.getLastPathSegment();
