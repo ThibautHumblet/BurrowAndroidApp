@@ -18,7 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
-public class BorrowedMeFragment extends Fragment {
+public class MyCouponsFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private ViewGroup view;
@@ -28,7 +28,7 @@ public class BorrowedMeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.view = container;
         getTestData();
-        return  inflater.inflate(R.layout.fragment_borrowed_mine, container, false);
+        return  inflater.inflate(R.layout.fragment_my_coupons, container, false);
     }
 
     // See: https://firebase.google.com/docs/firestore/quickstart
