@@ -14,15 +14,26 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import pl.aprilapps.easyphotopicker.ChooserType;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -34,12 +45,21 @@ public class AddFragment extends Fragment {
     final private Calendar myCalendar = Calendar.getInstance();
     final private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
+    private EditText txtCouponName;
     private EditText txtEndDate;
     private EditText txtNotifyDate;
     private Button btnChooseImage;
     private ImageView imgCoupon;
+    private File currentImageFile;
     private Uri currentImageUri;
     private Button btnAddCoupon;
+    private ProgressBar pbAddCoupon;
+
+    private FirebaseAuth auth;
+    private FirebaseFirestore db;
+
+    private Date ExpireDate;
+    private Date NotifyDate;
 
     private static final int CHOOSER_PERMISSIONS_REQUEST_CODE = 7459;
     private static final int CAMERA_REQUEST_CODE = 7500;
@@ -58,6 +78,9 @@ public class AddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -79,18 +102,19 @@ public class AddFragment extends Fragment {
                 .allowMultiple(false)
                 .build();
 
+        txtCouponName = view.findViewById(R.id.txtCouponName);
         txtEndDate = view.findViewById(R.id.txtEndDate);
         txtNotifyDate = view.findViewById(R.id.txtNotifyDate);
         btnChooseImage = view.findViewById(R.id.btnChooseImage);
         imgCoupon = view.findViewById(R.id.imgCoupon);
         btnAddCoupon = view.findViewById(R.id.btnAddCoupon);
+        pbAddCoupon = view.findViewById(R.id.pbAddCoupon);
 
         // Restore state if needed.
         if (savedInstanceState != null) {
             currentImageUri = savedInstanceState.getParcelable("imageUri");
             imgCoupon.setImageURI(currentImageUri);
         }
-
         imgCoupon.setImageURI(currentImageUri);
 
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
@@ -152,17 +176,48 @@ public class AddFragment extends Fragment {
         btnAddCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                pbAddCoupon.setVisibility(View.VISIBLE);
+
+
+                String couponName = txtCouponName.getText().toString();
+                Coupon coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
+
+                Database.CreateCoupon(coupon)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Firestore", "Document added");
+                            pbAddCoupon.setVisibility(View.GONE);
+                            resetView();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Firestore", e.getMessage());
+                            pbAddCoupon.setVisibility(View.GONE);
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
             }
         });
     }
 
     private void setEndDate(Date endDate) {
         txtEndDate.setText(dateFormatter.format(endDate));
+        ExpireDate = endDate;
     }
 
     private void setNotifyDate(Date notifyDate) {
         txtNotifyDate.setText(dateFormatter.format(notifyDate));
+        NotifyDate = notifyDate;
+    }
+
+    private void resetView() {
+        imgCoupon.setImageResource(android.R.color.transparent);
+        txtCouponName.getText().clear();
+        txtNotifyDate.getText().clear();
+        txtEndDate.getText().clear();
     }
 
     private boolean arePermissionsGranted(String[] permissions) {
@@ -204,6 +259,7 @@ public class AddFragment extends Fragment {
                     Log.d("EasyImage", "Image file returned: " + imageFile.getFile().toString());
                 }
                 // Set the image.
+                currentImageFile = imageFiles[0].getFile();
                 currentImageUri = Uri.fromFile(imageFiles[0].getFile());
                 imgCoupon.setImageURI(currentImageUri);
             }

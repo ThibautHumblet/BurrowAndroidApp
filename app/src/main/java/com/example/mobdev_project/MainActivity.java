@@ -50,11 +50,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public void launchAddMine(View view) {
-        Fragment fragment = new AddBorrowedMeFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-    }
-
     // Don't delete needed to call onRequestPermissionsResult in Fragments
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
