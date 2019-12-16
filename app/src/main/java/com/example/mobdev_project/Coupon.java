@@ -1,7 +1,5 @@
 package com.example.mobdev_project;
 
-import android.net.Uri;
-
 import com.google.firebase.firestore.Exclude;
 
 import java.io.File;
