@@ -4,6 +4,11 @@
     <string name="Burrow_Title_bottomtext">The go-to solution to borrow</string>
     <string name="Imagedesc_logo_burrow">Logo Burrow</string>
 
+    <!-- Navbar -->>
+    <string name="navbar_add">Toevoegen</string>
+    <string name="navbar_coupons">Mijn coupons</string>
+    <string name="navbar_account">Account</string>
+
     <!-- LoginActivity -->
     <string name="title_activity_login">Login</string>
 
