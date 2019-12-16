@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnAddCoupon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:onClick="launchAddMine"

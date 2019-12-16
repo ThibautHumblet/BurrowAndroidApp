@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -38,6 +38,8 @@ public class AddFragment extends Fragment {
     private EditText txtNotifyDate;
     private Button btnChooseImage;
     private ImageView imgCoupon;
+    private Uri currentImageUri;
+    private Button btnAddCoupon;
 
     private static final int CHOOSER_PERMISSIONS_REQUEST_CODE = 7459;
     private static final int CAMERA_REQUEST_CODE = 7500;
@@ -48,10 +50,14 @@ public class AddFragment extends Fragment {
     private EasyImage easyImage;
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("imageUri", currentImageUri);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -63,6 +69,8 @@ public class AddFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+        // Initialize
         easyImage = new EasyImage.Builder(getContext())
                 .setChooserTitle("Pick image")
                 .setCopyImagesToPublicGalleryFolder(false)
@@ -75,6 +83,15 @@ public class AddFragment extends Fragment {
         txtNotifyDate = view.findViewById(R.id.txtNotifyDate);
         btnChooseImage = view.findViewById(R.id.btnChooseImage);
         imgCoupon = view.findViewById(R.id.imgCoupon);
+        btnAddCoupon = view.findViewById(R.id.btnAddCoupon);
+
+        // Restore state if needed.
+        if (savedInstanceState != null) {
+            currentImageUri = savedInstanceState.getParcelable("imageUri");
+            imgCoupon.setImageURI(currentImageUri);
+        }
+
+        imgCoupon.setImageURI(currentImageUri);
 
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +148,13 @@ public class AddFragment extends Fragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        btnAddCoupon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
     }
 
     private void setEndDate(Date endDate) {
@@ -171,10 +195,7 @@ public class AddFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("Pffff", "onActivityResult: TestTESTETET");
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
 
         easyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
             @Override
@@ -182,7 +203,9 @@ public class AddFragment extends Fragment {
                 for (MediaFile imageFile : imageFiles) {
                     Log.d("EasyImage", "Image file returned: " + imageFile.getFile().toString());
                 }
-
+                // Set the image.
+                currentImageUri = Uri.fromFile(imageFiles[0].getFile());
+                imgCoupon.setImageURI(currentImageUri);
             }
 
             @Override
