@@ -179,7 +179,7 @@ public class AddFragment extends Fragment {
                 String couponName = txtCouponName.getText().toString();
                 Coupon coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
 
-                Database.CreateCoupon(coupon)
+                Database.getInstance().CreateCoupon(coupon)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
