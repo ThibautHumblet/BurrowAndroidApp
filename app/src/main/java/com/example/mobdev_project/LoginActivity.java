@@ -27,7 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText txtPassword;
     private Button btnLogin;
     private Button btnRegister;
-    private SignInButton btnGoogleLogin;
     private ProgressBar progressBar;
 
     @Override

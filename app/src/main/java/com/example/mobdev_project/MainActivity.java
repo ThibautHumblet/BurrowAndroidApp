@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = addFragment;
                     break;
                 case R.id.nav_borrowed_me:
-                    selectedFragment = new BorrowedMeFragment();
+                    selectedFragment = new MyCouponsFragment();
                     break;
                 case R.id.nav_account:
                     selectedFragment = new AccountFragment();
@@ -49,11 +48,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
-
-    public void launchAddMine(View view) {
-        Fragment fragment = new AddBorrowedMeFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-    }
 
     // Don't delete needed to call onRequestPermissionsResult in Fragments
     @Override
