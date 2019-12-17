@@ -20,6 +20,7 @@ public class ImagePicker {
 
     private static String currentPhotoPath;
     public static Uri currentPhotoUri;
+    public static  File currentPhotoFile;
 
     public final static int GALLERY_REQUEST_CODE = 666;
     public final static int CAMERA_REQUEST_CODE = 999;
@@ -48,6 +49,7 @@ public class ImagePicker {
                 Uri photoUri = FileProvider.getUriForFile(activity,
                         "com.example.mobdev_project.fileprovider",
                         photoFile);
+                currentPhotoFile = photoFile;
                 currentPhotoUri = photoUri;
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 activity.startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);

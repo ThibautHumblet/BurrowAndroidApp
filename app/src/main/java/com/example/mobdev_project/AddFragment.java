@@ -148,7 +148,15 @@ public class AddFragment extends Fragment {
 
 
                 String couponName = txtCouponName.getText().toString();
-                Coupon coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
+                Coupon coupon;
+
+                if (couponName != null && ExpireDate != null && NotifyDate != null && currentImageFile != null && currentImageUri != null) {
+                    coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
+                } else {
+                    pbAddCoupon.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 try {
                     Database.getInstance().CreateCoupon(coupon)
@@ -177,7 +185,6 @@ public class AddFragment extends Fragment {
     }
 
     private void setEndDate(Date endDate) {
-
         txtEndDate.setText(DateHelpers.FormatDate(endDate));
         ExpireDate = endDate;
     }
@@ -192,6 +199,10 @@ public class AddFragment extends Fragment {
         txtCouponName.getText().clear();
         txtNotifyDate.getText().clear();
         txtEndDate.getText().clear();
+        ExpireDate = null;
+        NotifyDate = null;
+        currentImageFile = null;
+        currentImageUri = null;
     }
 
     @Override
@@ -199,6 +210,7 @@ public class AddFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (PermissionHelpers.isPermissionRequestSuccessful(requestCode, permissions, grantResults)){
             // Open camera or gallery.
+            ImagePicker.pickImage(getActivity());
         }
     }
 
@@ -216,6 +228,8 @@ public class AddFragment extends Fragment {
                     //Uri cameraImage = (Uri)data.getExtras().get(MediaStore.EXTRA_OUTPUT);
                     // Workaround because for some reason the intent data gets deleted after the picture is taken.
                     Uri cameraImage = ImagePicker.currentPhotoUri;
+                    currentImageUri = ImagePicker.currentPhotoUri;
+                    currentImageFile = ImagePicker.currentPhotoFile;
                     imgCoupon.setImageURI(cameraImage);
                     break;
                 default:
