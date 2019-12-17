@@ -4,16 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.mobdev_project.Helpers.NotificationPublisher;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
     private Fragment selectedFragment;
     private AddFragment addFragment = new AddFragment();
+
+    final long intervalPeriod=10*1000;
+    AlarmManager mAlarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,21 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.nav_add:
                     selectedFragment = addFragment;
+                    NotificationChannel notificationChannel = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        notificationChannel = new NotificationChannel("default",
+                                "primary", NotificationManager.IMPORTANCE_HIGH);
+
+                        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        if (manager != null) manager.createNotificationChannel(notificationChannel);
+
+                        mAlarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+
+                        PendingIntent intent = PendingIntent.getBroadcast(getApplicationContext(), 1234,
+                                new Intent(getApplicationContext(), NotificationPublisher.class), 0);
+
+                        mAlarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + intervalPeriod, intent);
+                    }
                     break;
                 case R.id.nav_borrowed_me:
                     selectedFragment = new MyCouponsFragment();
