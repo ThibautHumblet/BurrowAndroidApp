@@ -1,15 +1,24 @@
 package com.example.mobdev_project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +26,8 @@ import java.util.List;
 
 
 public class MyCouponsFragment extends Fragment implements CouponsAdapter.CouponClickListener{
-    CouponsAdapter adapter;
+    private CouponsAdapter adapter;
+    private SwipeRefreshLayout srlLoadCoupons;
 
     @Nullable
     @Override
@@ -29,15 +39,15 @@ public class MyCouponsFragment extends Fragment implements CouponsAdapter.Coupon
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ArrayList<Coupon> coupons = new ArrayList<>();
-        coupons.add(new Coupon("TEst", new Date("16/12/2019"), new Date("16/12/2019"), null));
-        coupons.add(new Coupon("TEst", new Date("16/12/2019"), new Date("16/12/2019"), null));
-        coupons.add(new Coupon("TEst", new Date("16/12/2019"), new Date("16/12/2019"), null));
-
-
         RecyclerView rcyCoupons = view.findViewById(R.id.rcyCoupons);
+        srlLoadCoupons = view.findViewById(R.id.srlLoadCoupons);
+
+        srlLoadCoupons.setOnRefreshListener(refreshListener);
+        srlLoadCoupons.setRefreshing(true);
+        getCoupons();
+
         rcyCoupons.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CouponsAdapter(getContext(), coupons);
+        adapter = new CouponsAdapter(getContext());
         adapter.setClickListener(this);
         rcyCoupons.setAdapter(adapter);
     }
@@ -48,7 +58,55 @@ public class MyCouponsFragment extends Fragment implements CouponsAdapter.Coupon
     }
 
     @Override
-    public void onDelete(View view, int position) {
+    public void onDelete(View view, final int position) {
+        Coupon coupon = adapter.getCoupon(position);
+        try {
+            Database.getInstance().DeleteCoupon(coupon.Id).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        adapter.delete(position);
+                        Toast.makeText(getContext(), "Coupon deleted.", Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.e("MyCouponsFragment", task.getException().getMessage());
+                        Toast.makeText(getContext(), "Oops something went wrong :'(", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        } catch (FirebaseAuthInvalidCredentialsException e) {
+            Log.e("MyCouponsFragment", "DeleteCoupon: ", e);
+        }
+    }
 
+    private SwipeRefreshLayout.OnRefreshListener refreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            getCoupons();
+        }
+    };
+
+    private void getCoupons() {
+        try {
+            Database.getInstance().GetCoupons().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        adapter.clear();
+                        for (QueryDocumentSnapshot couponDoc : task.getResult()) {
+                            if (couponDoc.exists())
+                                adapter.add(couponDoc.toObject(Coupon.class));
+                        }
+                        srlLoadCoupons.setRefreshing(false);
+                    } else {
+                        Log.e("MyCouponsFragment", task.getException().getMessage());
+                        Toast.makeText(getContext(), "Oops something went wrong :'(", Toast.LENGTH_LONG).show();
+                        srlLoadCoupons.setRefreshing(false);
+                    }
+                }
+            });
+        } catch (FirebaseAuthInvalidCredentialsException e) {
+            Log.e("MyCouponsFragment", "GetCoupons: ", e);
+            srlLoadCoupons.setRefreshing(false);
+        }
     }
 }

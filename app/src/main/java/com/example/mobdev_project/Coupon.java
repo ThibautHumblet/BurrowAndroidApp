@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.Date;
 
 public class Coupon {
+    public String Id;
     public String Name;
     public Date ExpireDate;
     public Date NotifyDate;
@@ -15,7 +16,9 @@ public class Coupon {
 
     public String ImageDownloadUrl;
 
-    public Coupon(String name, Date expDate, Date notifyDate, File imageFile) {
+    Coupon() {}
+
+    Coupon(String name, Date expDate, Date notifyDate, File imageFile) {
         Name = name;
         ExpireDate = expDate;
         NotifyDate = notifyDate;

@@ -24,7 +24,10 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -40,7 +43,6 @@ import pl.aprilapps.easyphotopicker.MediaSource;
 
 public class AddFragment extends Fragment {
     final private Calendar myCalendar = Calendar.getInstance();
-    final private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     private EditText txtCouponName;
     private EditText txtEndDate;
@@ -64,7 +66,7 @@ public class AddFragment extends Fragment {
     private EasyImage easyImage;
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable("imageUri", currentImageUri);
     }
@@ -80,7 +82,7 @@ public class AddFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
 
@@ -173,34 +175,39 @@ public class AddFragment extends Fragment {
                 String couponName = txtCouponName.getText().toString();
                 Coupon coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
 
-                Database.getInstance().CreateCoupon(coupon)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("Firestore", "Document added");
-                            pbAddCoupon.setVisibility(View.GONE);
-                            resetView();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e("Firestore", e.getMessage());
-                            pbAddCoupon.setVisibility(View.GONE);
-                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                try {
+                    Database.getInstance().CreateCoupon(coupon)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("Firestore", "Document added");
+                                    pbAddCoupon.setVisibility(View.GONE);
+                                    resetView();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e("Firestore", e.getMessage());
+                                    pbAddCoupon.setVisibility(View.GONE);
+                                    Toast.makeText(getContext(), "Oops something went wrong :'(", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                } catch (FirebaseAuthInvalidCredentialsException e) {
+                    Log.e("AddFragment", "CreateCoupon: ", e);
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
     private void setEndDate(Date endDate) {
-        txtEndDate.setText(dateFormatter.format(endDate));
+        txtEndDate.setText(DateHelpers.FormatDate(endDate));
         ExpireDate = endDate;
     }
 
     private void setNotifyDate(Date notifyDate) {
-        txtNotifyDate.setText(dateFormatter.format(notifyDate));
+        txtNotifyDate.setText(DateHelpers.FormatDate(notifyDate));
         NotifyDate = notifyDate;
     }
 
@@ -225,7 +232,7 @@ public class AddFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == CHOOSER_PERMISSIONS_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -241,11 +248,11 @@ public class AddFragment extends Fragment {
         }
     }
 
-    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
+    void handleActivityResult(int requestCode, int resultCode, Intent data) {
 
         easyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
             @Override
-            public void onMediaFilesPicked(MediaFile[] imageFiles, MediaSource source) {
+            public void onMediaFilesPicked(@NotNull MediaFile[] imageFiles, @NotNull MediaSource source) {
                 for (MediaFile imageFile : imageFiles) {
                     Log.d("EasyImage", "Image file returned: " + imageFile.getFile().toString());
                 }

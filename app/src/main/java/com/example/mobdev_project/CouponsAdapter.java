@@ -1,7 +1,6 @@
 package com.example.mobdev_project;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CouponsAdapter extends RecyclerView.Adapter<CouponsAdapter.ViewHolder> {
@@ -18,13 +22,14 @@ public class CouponsAdapter extends RecyclerView.Adapter<CouponsAdapter.ViewHold
     private LayoutInflater inflater;
     private CouponClickListener couponClickListener;
 
-    CouponsAdapter(Context context, List<Coupon> data) {
+    CouponsAdapter(Context context) {
         inflater = LayoutInflater.from(context);
-        coupons = data;
+        coupons = new ArrayList<>();
     }
 
+    @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.coupon_row, parent, false);
         return new ViewHolder(view);
     }
@@ -32,11 +37,12 @@ public class CouponsAdapter extends RecyclerView.Adapter<CouponsAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Coupon coupon = coupons.get(position);
-        if (coupon.ImageDownloadUrl != null)
-            holder.imgCoupon.setImageURI(Uri.parse(coupon.ImageDownloadUrl));
+
+        Picasso.get().load(coupon.ImageDownloadUrl).into(holder.imgCoupon);
+
         holder.lblName.setText(coupon.Name);
-        holder.lblExpireDate.setText(coupon.ExpireDate.toString());
-        holder.lblNotifyDate.setText(coupon.NotifyDate.toString());
+        holder.lblExpireDate.setText(DateHelpers.FormatDate(coupon.ExpireDate));
+        holder.lblNotifyDate.setText(DateHelpers.FormatDate(coupon.NotifyDate));
     }
 
     @Override
@@ -44,7 +50,7 @@ public class CouponsAdapter extends RecyclerView.Adapter<CouponsAdapter.ViewHold
         return coupons.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imgCoupon;
         TextView lblName;
         TextView lblNotifyDate;
@@ -85,6 +91,26 @@ public class CouponsAdapter extends RecyclerView.Adapter<CouponsAdapter.ViewHold
 
     Coupon getCoupon(int position) {
         return coupons.get(position);
+    }
+
+    void clear() {
+        coupons.clear();
+        notifyDataSetChanged();
+    }
+
+    void delete(int position) {
+        coupons.remove(position);
+        notifyDataSetChanged();
+    }
+
+    void add(Coupon coupon) {
+        this.coupons.add(coupon);
+        notifyDataSetChanged();
+    }
+
+    void addAll(List<Coupon> coupons) {
+        this.coupons.addAll(coupons);
+        notifyDataSetChanged();
     }
 
     void setClickListener(CouponClickListener couponClickListener) {
