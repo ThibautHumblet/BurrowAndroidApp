@@ -1,11 +1,12 @@
 package com.example.mobdev_project;
 
-import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,28 +19,20 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.mobdev_project.Helpers.DateHelpers;
+import com.example.mobdev_project.Helpers.ImagePicker;
+import com.example.mobdev_project.Helpers.PermissionHelpers;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-
-import pl.aprilapps.easyphotopicker.ChooserType;
-import pl.aprilapps.easyphotopicker.DefaultCallback;
-import pl.aprilapps.easyphotopicker.EasyImage;
-import pl.aprilapps.easyphotopicker.MediaFile;
-import pl.aprilapps.easyphotopicker.MediaSource;
 
 public class AddFragment extends Fragment {
     final private Calendar myCalendar = Calendar.getInstance();
@@ -56,14 +49,6 @@ public class AddFragment extends Fragment {
 
     private Date ExpireDate;
     private Date NotifyDate;
-
-    private static final int CHOOSER_PERMISSIONS_REQUEST_CODE = 7459;
-    private static final int CAMERA_REQUEST_CODE = 7500;
-    private static final int CAMERA_VIDEO_REQUEST_CODE = 7501;
-    private static final int GALLERY_REQUEST_CODE = 7502;
-    private static final int DOCUMENTS_REQUEST_CODE = 7503;
-
-    private EasyImage easyImage;
 
     @Override
     public void onSaveInstanceState(@NotNull Bundle outState) {
@@ -85,16 +70,6 @@ public class AddFragment extends Fragment {
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-        // Initialize
-        easyImage = new EasyImage.Builder(getContext())
-                .setChooserTitle("Pick image")
-                .setCopyImagesToPublicGalleryFolder(false)
-                .setChooserType(ChooserType.CAMERA_AND_GALLERY)
-                .setFolderName("Burrow_images")
-                .allowMultiple(false)
-                .build();
-
         txtCouponName = view.findViewById(R.id.txtCouponName);
         txtEndDate = view.findViewById(R.id.txtEndDate);
         txtNotifyDate = view.findViewById(R.id.txtNotifyDate);
@@ -113,11 +88,11 @@ public class AddFragment extends Fragment {
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] necessaryPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                if (arePermissionsGranted(necessaryPermissions)) {
-                    easyImage.openChooser(getActivity());
+                if (PermissionHelpers.hasRequeredPermissions(getContext())) {
+                    // Choose image.
+                    ImagePicker.pickImage(getActivity());
                 } else {
-                    requestPermissionsCompat(necessaryPermissions, CHOOSER_PERMISSIONS_REQUEST_CODE);
+                    PermissionHelpers.requestRequiredPermissions(getActivity());
                 }
             }
         });
@@ -173,7 +148,15 @@ public class AddFragment extends Fragment {
 
 
                 String couponName = txtCouponName.getText().toString();
-                Coupon coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
+                Coupon coupon;
+
+                if (couponName != null && ExpireDate != null && NotifyDate != null && currentImageFile != null && currentImageUri != null) {
+                    coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
+                } else {
+                    pbAddCoupon.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 try {
                     Database.getInstance().CreateCoupon(coupon)
@@ -216,62 +199,42 @@ public class AddFragment extends Fragment {
         txtCouponName.getText().clear();
         txtNotifyDate.getText().clear();
         txtEndDate.getText().clear();
-    }
-
-    private boolean arePermissionsGranted(String[] permissions) {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(getActivity(), permission) != PackageManager.PERMISSION_GRANTED)
-                return false;
-
-        }
-        return true;
-    }
-
-    private void requestPermissionsCompat(String[] permissions, int requestCode) {
-        requestPermissions(permissions, requestCode);
+        ExpireDate = null;
+        NotifyDate = null;
+        currentImageFile = null;
+        currentImageUri = null;
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == CHOOSER_PERMISSIONS_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            easyImage.openChooser(getActivity());
-        } else if (requestCode == CAMERA_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            easyImage.openCameraForImage(getActivity());
-        } else if (requestCode == CAMERA_VIDEO_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            easyImage.openCameraForVideo(getActivity());
-        } else if (requestCode == GALLERY_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            easyImage.openGallery(getActivity());
-        } else if (requestCode == DOCUMENTS_REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            easyImage.openDocuments(getActivity());
+        if (PermissionHelpers.isPermissionRequestSuccessful(requestCode, permissions, grantResults)){
+            // Open camera or gallery.
+            ImagePicker.pickImage(getActivity());
         }
     }
 
-    void handleActivityResult(int requestCode, int resultCode, Intent data) {
 
-        easyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
-            @Override
-            public void onMediaFilesPicked(@NotNull MediaFile[] imageFiles, @NotNull MediaSource source) {
-                for (MediaFile imageFile : imageFiles) {
-                    Log.d("EasyImage", "Image file returned: " + imageFile.getFile().toString());
-                }
-                // Set the image.
-                currentImageFile = imageFiles[0].getFile();
-                currentImageUri = Uri.fromFile(imageFiles[0].getFile());
-                imgCoupon.setImageURI(currentImageUri);
-            }
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
 
-            @Override
-            public void onImagePickerError(@NonNull Throwable error, @NonNull MediaSource source) {
-                //Some error handling
-                error.printStackTrace();
+        // Get image.
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case ImagePicker.GALLERY_REQUEST_CODE:
+                    Uri selectedImage = data.getData();
+                    imgCoupon.setImageURI(selectedImage);
+                    break;
+                case ImagePicker.CAMERA_REQUEST_CODE:
+                    //Uri cameraImage = (Uri)data.getExtras().get(MediaStore.EXTRA_OUTPUT);
+                    // Workaround because for some reason the intent data gets deleted after the picture is taken.
+                    Uri cameraImage = ImagePicker.currentPhotoUri;
+                    currentImageUri = ImagePicker.currentPhotoUri;
+                    currentImageFile = ImagePicker.currentPhotoFile;
+                    imgCoupon.setImageURI(cameraImage);
+                    break;
+                default:
+                    break;
             }
-
-            @Override
-            public void onCanceled(@NonNull MediaSource source) {
-                //Not necessary to remove any files manually anymore
-            }
-        });
+        }
     }
 }
