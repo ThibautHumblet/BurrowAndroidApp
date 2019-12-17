@@ -32,8 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorBackgroundDark"
-        android:backgroundTint="@color/colorBackgroundDark"
-        android:foregroundTint="@color/colorAccent"
+        app:itemIconTint="@drawable/bottom_navigation_colors"
+        app:itemTextColor="@drawable/bottom_navigation_colors"
         app:menu="@menu/bottom_navigation" />
 
 
