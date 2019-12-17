@@ -10,6 +10,7 @@
         android:id="@+id/btnAddCoupon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:text="@string/add_coupon"
         android:textColor="@color/colorText"
         app:backgroundTint="@android:color/white"
@@ -22,23 +23,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="@string/coupon_name"
         android:inputType="textPersonName"
+        android:textColor="@color/colorText"
+        app:layout_constraintBottom_toTopOf="@+id/txtEndDate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgCoupon"
-        android:textColor="@color/colorText"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txtEndDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:editable="false"
         android:ems="10"
         android:focusable="false"
@@ -46,45 +47,61 @@
         android:inputType="date"
         android:textColor="@color/colorText"
         android:textColorLink="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/txtNotifyDate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCouponName" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/txtNotifyDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="72dp"
         android:editable="false"
         android:ems="10"
         android:focusable="false"
         android:hint="@string/notify_date"
         android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddCoupon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEndDate" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imgCoupon"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="130dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="@string/coupon_name"
+        app:layout_constraintBottom_toTopOf="@+id/txtCouponName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintStart_toEndOf="@+id/btnChooseImage"
+        tools:srcCompat="@tools:sample/avatars[0]" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnChooseImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/choose_image"
         android:textColor="@color/colorText"
         app:backgroundTint="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/imgCoupon"
+        app:layout_constraintBottom_toTopOf="@+id/txtCouponName"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_black"
+        android:text="Coupon toevoegen"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/pbAddCoupon"

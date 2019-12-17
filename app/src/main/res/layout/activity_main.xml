@@ -7,11 +7,24 @@
     tools:context=".MainActivity">
 
     <FrameLayout
+        android:id="@+id/rectangle"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/rectangle_background"/>
+
+    <FrameLayout
+        android:id="@+id/half_circle"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@drawable/half_circle_background"
+        android:layout_below="@id/rectangle" />
+
+    <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation"
-        android:background="@color/colorBackground" />
+        android:layout_above="@id/bottom_navigation"             />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
