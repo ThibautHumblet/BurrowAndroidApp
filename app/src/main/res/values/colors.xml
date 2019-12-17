@@ -7,4 +7,5 @@
     <color name="colorBackgroundDark">#3726A6</color>
     <color name="colorText">#4b4b4b</color>
     <color name="colorTextLight">#8a8a8a</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>
