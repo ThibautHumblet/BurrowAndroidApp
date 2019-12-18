@@ -11,6 +11,8 @@ import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
+import com.example.mobdev_project.R;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -75,22 +77,22 @@ public class ImagePicker {
     }
 
     public static void pickImage(final Activity activity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Choose image")
-                .setMessage("Do you want to choose an image from camera or gallery?")
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.ThemeOverlay_MaterialComponents_Dialog);
+        builder.setTitle("Kies afbeelding")
+                .setMessage("Kies een afbeelding uit de gallerij of trek zelf een foto")
                 .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pickFromCamera(activity);
                     }
                 })
-                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNeutralButton("Annuleren", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.cancel();
                     }
                 })
-                .setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Gallerij", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         pickFromGallery(activity);
