@@ -31,7 +31,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:fontFamily="@font/roboto_black"
-        android:text="Coupon toevoegen"
+        android:text="@string/add_coupon"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +111,8 @@
         android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/btnAddCoupon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:importantForAutofill="no" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddCoupon"
