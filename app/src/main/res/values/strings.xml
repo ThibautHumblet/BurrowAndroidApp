@@ -5,37 +5,48 @@
     <string name="Imagedesc_logo_burrow">Logo Burrow</string>
 
     <!-- Navbar -->>
-    <string name="navbar_add">Add</string>
-    <string name="navbar_coupons">My coupons</string>
+    <string name="navbar_add">Coupon toevoegen</string>
+    <string name="navbar_coupons">Mijn coupons</string>
     <string name="navbar_account">Account</string>
 
     <!-- LoginActivity -->
     <string name="title_activity_login">Login</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_login">Sign in</string>
-    <string name="action_register">Register</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="prompt_password">Wachtwoord</string>
+    <string name="action_login">Login</string>
+    <string name="action_register">Registreren</string>
+    <string name="welcome">"Welkom!"</string>
+    <string name="invalid_username">Ongeldige gebruikersnaam</string>
+    <string name="invalid_password">Wachtwoord moet langer dan 5 karakters zijn</string>
+    <string name="login_failed">"Login mislukt"</string>
 
     <!-- Account Fragment -->
-    <string name="logout">Log out</string>
-    <string name="change_password">Change password</string>
+    <string name="my_account">Mijn account</string>
+    <string name="e_mail">e-mail</string>
+    <string name="logout">Uitloggen</string>
+    <string name="change_password">Wachtwoord veranderen</string>
 
     <!-- Change Password Dialog -->
-    <string name="current_password">Current password</string>
-    <string name="new_password">New password</string>
-    <string name="confirm_password">Confirm password</string>
-    <string name="change_password_positive">Confirm</string>
-    <string name="change_password_negative">Cancel</string>
+    <string name="current_password">Huidig wachtwoord</string>
+    <string name="new_password">Nieuw wachtwoord</string>
+    <string name="confirm_password">Wachtwoord herhalen</string>
+    <string name="change_password_positive">Bevestigen</string>
+    <string name="change_password_negative">Annuleren</string>
 
     <!-- Add screen -->
-    <string name="add_coupon">Add coupon</string>
-    <string name="coupon_name">Coupon name</string>
-    <string name="end_date">End date</string>
-    <string name="notify_date">Notify date</string>
-    <string name="choose_image">Choose image</string>
-    <string name="burrow_login">Burrow login</string>
+    <string name="add_coupon">Coupon toevoegen</string>
+    <string name="coupon_name">Naam coupon</string>
+    <string name="end_date">Vervaldatum</string>
+    <string name="notify_date">Notificatie Datum</string>
+    <string name="choose_image">Kies afbeelding</string>
+
+    <!-- My coupons -->
+    <string name="image_coupon">Afbeelding coupon</string>
+    <string name="name_coupon">TextView</string>
+    <string name="notification_date">TextView</string>
+    <string name="expire_date">TextView</string>
+    <string name="expire_date_label">Vervalt op</string>
+    <string name="notification_date_label">Notificatie op</string>
+    <string name="my_coupons">Mijn coupons</string>
+
 </resources>
