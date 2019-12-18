@@ -82,7 +82,7 @@ public class AccountFragment extends Fragment {
         btnOpenChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Dialog);
                 final LayoutInflater inflater = requireActivity().getLayoutInflater();
 
                 final View dialogView = inflater.inflate(R.layout.dialog_change_password, null);
@@ -93,7 +93,6 @@ public class AccountFragment extends Fragment {
 
 
                 builder.setView(dialogView);
-                builder.setTitle(R.string.change_password);
                 builder.setPositiveButton(R.string.change_password_positive, null);
                 builder.setNegativeButton(R.string.change_password_negative, new DialogInterface.OnClickListener() {
                     @Override
