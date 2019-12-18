@@ -1,31 +1,23 @@
 <resources>
     <string name="app_name">Burrow</string>
     <string name="burrow_title">Burrow</string>
-    <string name="Burrow_Title_bottomtext">The go-to solution to borrow</string>
+    <string name="Burrow_Title_bottomtext">Keeping coupons alive</string>
     <string name="Imagedesc_logo_burrow">Logo Burrow</string>
 
     <!-- Navbar -->>
-    <string name="navbar_add">Toevoegen</string>
-    <string name="navbar_coupons">Mijn coupons</string>
+    <string name="navbar_add">Add</string>
+    <string name="navbar_coupons">My coupons</string>
     <string name="navbar_account">Account</string>
 
     <!-- LoginActivity -->
     <string name="title_activity_login">Login</string>
-
     <string name="prompt_email">Email</string>
-
     <string name="prompt_password">Password</string>
-
     <string name="action_login">Sign in</string>
-
     <string name="action_register">Register</string>
-
     <string name="welcome">"Welcome !"</string>
-
     <string name="invalid_username">Not a valid username</string>
-
     <string name="invalid_password">Password must be >5 characters</string>
-
     <string name="login_failed">"Login failed"</string>
 
     <!-- Account Fragment -->
@@ -45,4 +37,5 @@
     <string name="end_date">End date</string>
     <string name="notify_date">Notify date</string>
     <string name="choose_image">Choose image</string>
+    <string name="burrow_login">Burrow login</string>
 </resources>
