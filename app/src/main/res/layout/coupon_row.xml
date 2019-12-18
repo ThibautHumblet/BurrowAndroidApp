@@ -28,12 +28,14 @@
 
         <TextView
             android:id="@+id/lblName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="TextView"
             android:textSize="24sp"
+            app:layout_constraintEnd_toStartOf="@+id/btnDelete"
             app:layout_constraintStart_toEndOf="@+id/imgCoupon"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,7 +77,7 @@
             android:id="@+id/textViewVervalt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
             android:text="Vervalt op"
             app:layout_constraintBottom_toTopOf="@+id/lblExpireDate"
             app:layout_constraintStart_toEndOf="@+id/imgCoupon" />

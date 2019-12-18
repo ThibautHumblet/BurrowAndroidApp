@@ -1,14 +1,17 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <corners
-        android:bottomLeftRadius="45dp"
-        android:bottomRightRadius="45dp"
-        android:topLeftRadius="45dp"
-        android:topRightRadius="45dp" />
-
-    <stroke android:color="@color/colorWhite">
+    <item>
+        <shape android:shape="oval">
+            <size android:width="250dp" android:height="250dp"/>
 
 
-    </stroke>
+            <gradient
+                android:angle="270"
+                android:endColor="@color/colorBackground"
+                android:startColor="@color/colorBackgroundDark"
+                android:centerColor="@color/colorWhite" />
+        </shape>
 
-</shape>
+    </item>
+
+</selector>

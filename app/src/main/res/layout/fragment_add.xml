@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:isScrollContainer="false">
 
     <FrameLayout
         android:id="@+id/rectangle"
@@ -67,12 +68,14 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
+        android:fontFamily="@font/roboto"
         android:hint="@string/coupon_name"
         android:inputType="textPersonName"
         android:textColor="@color/colorText"
         app:layout_constraintBottom_toTopOf="@+id/txtEndDate"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:windowSoftInputMode="adjustNothing"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/txtEndDate"
@@ -84,6 +87,7 @@
         android:editable="false"
         android:ems="10"
         android:focusable="false"
+        android:fontFamily="@font/roboto"
         android:hint="@string/end_date"
         android:inputType="date"
         android:textColor="@color/colorText"
@@ -102,6 +106,7 @@
         android:editable="false"
         android:ems="10"
         android:focusable="false"
+        android:fontFamily="@font/roboto"
         android:hint="@string/notify_date"
         android:inputType="date"
         app:layout_constraintBottom_toTopOf="@+id/btnAddCoupon"
@@ -112,9 +117,11 @@
         android:id="@+id/btnAddCoupon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/add_coupon"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorText"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

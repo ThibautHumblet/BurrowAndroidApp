@@ -21,7 +21,8 @@
         android:background="@color/colorBackgroundDark"
         app:itemIconTint="@drawable/bottom_navigation_colors"
         app:itemTextColor="@drawable/bottom_navigation_colors"
-        app:menu="@menu/bottom_navigation" />
+        app:menu="@menu/bottom_navigation"
+        android:windowSoftInputMode="adjustNothing"/>
 
 
 </RelativeLayout>
