@@ -130,7 +130,7 @@ public class AddFragment extends Fragment {
                     coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageUri);
                 } else {
                     pbAddCoupon.setVisibility(View.GONE);
-                    Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Gelieve alle velden in te vullen", Toast.LENGTH_LONG).show();
                     return;
                 }
 

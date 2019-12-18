@@ -66,12 +66,12 @@ public class LoginActivity extends AppCompatActivity {
         password = txtPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Please enter email ...", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Gelieve een e-mailadres in te vullen", Toast.LENGTH_LONG).show();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Please enter password ...", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Gelieve een wachtwoord in te vullen", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Registratie succesvol!", Toast.LENGTH_LONG).show();
 
                             LoginUser();
                         } else {
@@ -102,12 +102,12 @@ public class LoginActivity extends AppCompatActivity {
         password = txtPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Please enter email ...", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Gelieve een e-mailadres in te vullen", Toast.LENGTH_LONG).show();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Please enter password ...", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Gelieve een wachtwoord in te vullen", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -116,13 +116,13 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "LoginActivity successful!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Login succesvol!", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
 
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(i);
                         } else {
-                            Toast.makeText(getApplicationContext(), "LoginActivity failed!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Login mislukt!", Toast.LENGTH_LONG).show();
                             progressBar.setVisibility(View.GONE);
                         }
                     }

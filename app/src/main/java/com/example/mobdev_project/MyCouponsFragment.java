@@ -67,10 +67,10 @@ public class MyCouponsFragment extends Fragment implements CouponsAdapter.Coupon
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         adapter.delete(position);
-                        Toast.makeText(getContext(), "Coupon deleted.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Coupon verwijderd.", Toast.LENGTH_LONG).show();
                     } else {
                         Log.e("MyCouponsFragment", task.getException().getMessage());
-                        Toast.makeText(getContext(), "Oops something went wrong :'(", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Er heeft zich een fout voorgedaan, probeer opnieuw", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -100,7 +100,7 @@ public class MyCouponsFragment extends Fragment implements CouponsAdapter.Coupon
                         srlLoadCoupons.setRefreshing(false);
                     } else {
                         Log.e("MyCouponsFragment", task.getException().getMessage());
-                        Toast.makeText(getContext(), "Oops something went wrong :'(", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Er heeft zich een fout voorgedaan, probeer opnieuw", Toast.LENGTH_LONG).show();
                         srlLoadCoupons.setRefreshing(false);
                     }
                 }

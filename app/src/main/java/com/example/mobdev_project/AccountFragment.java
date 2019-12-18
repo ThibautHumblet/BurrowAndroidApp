@@ -124,7 +124,7 @@ public class AccountFragment extends Fragment {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-                                                            Toast.makeText(getContext(), "Password changed!", Toast.LENGTH_LONG).show();
+                                                            Toast.makeText(getContext(), "Password veranderd!", Toast.LENGTH_LONG).show();
                                                             dialogInterface.dismiss();
                                                         } else {
                                                             Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();

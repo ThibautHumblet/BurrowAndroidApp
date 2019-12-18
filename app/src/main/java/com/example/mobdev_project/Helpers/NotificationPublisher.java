@@ -25,7 +25,7 @@ public class NotificationPublisher extends BroadcastReceiver {
     private void updateNotification(Context context, String couponName){
         Notification notification = new Notification.Builder(context.getApplicationContext(), "default")
                 .setContentTitle("Coupon gaat vervallen")
-                .setContentText(couponName + " gaat bijna vervallen, gebruik hem snel voor het te laat is.")
+                .setContentText(couponName + " gaat bijna vervallen, gebruik hem snel voor het te laat is!")
                 .setSmallIcon(R.drawable.burrow_logo)
                 .setAutoCancel(true)
                 .build();
