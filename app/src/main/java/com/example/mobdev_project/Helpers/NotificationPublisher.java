@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -19,18 +17,15 @@ public class NotificationPublisher extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
-        //NEED A RESCHEDULE?
-        Toast.makeText(context, "Alarm worked.", Toast.LENGTH_LONG).show();
-
-        updateNotification(context);
-        Log.d("Not", "Hello");
+        String couponName = intent.getStringExtra("couponName");
+        updateNotification(context, couponName);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void updateNotification(Context context){
+    private void updateNotification(Context context, String couponName){
         Notification notification = new Notification.Builder(context.getApplicationContext(), "default")
-                .setContentTitle("title")
-                .setContentText("body")
+                .setContentTitle("Coupon gaat vervallen")
+                .setContentText(couponName + " gaat bijna vervallen, gebruik hem snel voor het te laat is.")
                 .setSmallIcon(R.drawable.burrow_logo)
                 .setAutoCancel(true)
                 .build();

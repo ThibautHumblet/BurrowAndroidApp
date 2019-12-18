@@ -43,7 +43,7 @@ public class CouponsAdapter extends RecyclerView.Adapter<CouponsAdapter.ViewHold
 
         holder.lblName.setText(coupon.Name);
         holder.lblExpireDate.setText(DateHelpers.FormatDate(coupon.ExpireDate));
-        holder.lblNotifyDate.setText(DateHelpers.FormatDate(coupon.NotifyDate));
+        holder.lblNotifyDate.setText(DateHelpers.FormatDateTime(coupon.NotifyDate));
     }
 
     @Override

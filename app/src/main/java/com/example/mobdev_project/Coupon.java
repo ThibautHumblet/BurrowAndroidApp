@@ -1,5 +1,7 @@
 package com.example.mobdev_project;
 
+import android.net.Uri;
+
 import com.google.firebase.firestore.Exclude;
 
 import java.io.File;
@@ -12,16 +14,16 @@ public class Coupon {
     public Date NotifyDate;
 
     @Exclude
-    public File ImageFile;
+    public Uri ImageUri;
 
     public String ImageDownloadUrl;
 
     Coupon() {}
 
-    Coupon(String name, Date expDate, Date notifyDate, File imageFile) {
+    Coupon(String name, Date expDate, Date notifyDate, Uri imageUri) {
         Name = name;
         ExpireDate = expDate;
         NotifyDate = notifyDate;
-        ImageFile = imageFile;
+        ImageUri = imageUri;
     }
 }

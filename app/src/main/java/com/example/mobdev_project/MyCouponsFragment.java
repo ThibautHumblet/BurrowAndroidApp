@@ -47,6 +47,7 @@ public class MyCouponsFragment extends Fragment implements CouponsAdapter.Coupon
         getCoupons();
 
         rcyCoupons.setLayoutManager(new LinearLayoutManager(getContext()));
+        rcyCoupons.setHasFixedSize(true);
         adapter = new CouponsAdapter(getContext());
         adapter.setClickListener(this);
         rcyCoupons.setAdapter(adapter);

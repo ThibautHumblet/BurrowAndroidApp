@@ -50,6 +50,7 @@ public class ImagePicker {
                         "com.example.mobdev_project.fileprovider",
                         photoFile);
                 currentPhotoFile = photoFile;
+                Log.d("Camera", currentPhotoFile.getPath());
                 currentPhotoUri = photoUri;
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 activity.startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);

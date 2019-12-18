@@ -1,10 +1,17 @@
 package com.example.mobdev_project;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -16,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +31,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mobdev_project.Helpers.DateHelpers;
 import com.example.mobdev_project.Helpers.ImagePicker;
+import com.example.mobdev_project.Helpers.NotificationPublisher;
 import com.example.mobdev_project.Helpers.PermissionHelpers;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,19 +51,12 @@ public class AddFragment extends Fragment {
     private EditText txtNotifyDate;
     private Button btnChooseImage;
     private ImageView imgCoupon;
-    private File currentImageFile;
     private Uri currentImageUri;
     private Button btnAddCoupon;
     private ProgressBar pbAddCoupon;
 
     private Date ExpireDate;
     private Date NotifyDate;
-
-    @Override
-    public void onSaveInstanceState(@NotNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("imageUri", currentImageUri);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,11 +80,6 @@ public class AddFragment extends Fragment {
         btnAddCoupon = view.findViewById(R.id.btnAddCoupon);
         pbAddCoupon = view.findViewById(R.id.pbAddCoupon);
 
-        // Restore state if needed.
-        if (savedInstanceState != null) {
-            currentImageUri = savedInstanceState.getParcelable("imageUri");
-            imgCoupon.setImageURI(currentImageUri);
-        }
         imgCoupon.setImageURI(currentImageUri);
 
         btnChooseImage.setOnClickListener(new View.OnClickListener() {
@@ -92,32 +89,11 @@ public class AddFragment extends Fragment {
                     // Choose image.
                     ImagePicker.pickImage(getActivity());
                 } else {
+                    // Request permissions.
                     PermissionHelpers.requestRequiredPermissions(getActivity());
                 }
             }
         });
-
-        final DatePickerDialog.OnDateSetListener onEndDateSet = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, month);
-                myCalendar.set(Calendar.DAY_OF_MONTH, day);
-
-                setEndDate(myCalendar.getTime());
-            }
-        };
-
-        final DatePickerDialog.OnDateSetListener onNotifyDateSet = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, month);
-                myCalendar.set(Calendar.DAY_OF_MONTH, day);
-
-                setNotifyDate(myCalendar.getTime());
-            }
-        };
 
         txtEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,10 +124,10 @@ public class AddFragment extends Fragment {
 
 
                 String couponName = txtCouponName.getText().toString();
-                Coupon coupon;
+                final Coupon coupon;
 
-                if (couponName != null && ExpireDate != null && NotifyDate != null && currentImageFile != null && currentImageUri != null) {
-                    coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageFile);
+                if (couponName != null && ExpireDate != null && NotifyDate != null && currentImageUri != null) {
+                    coupon = new Coupon(couponName, ExpireDate, NotifyDate, currentImageUri);
                 } else {
                     pbAddCoupon.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_LONG).show();
@@ -165,6 +141,7 @@ public class AddFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     Log.d("Firestore", "Document added");
                                     pbAddCoupon.setVisibility(View.GONE);
+                                    createCouponAlarm(NotifyDate.getTime(), coupon);
                                     resetView();
                                 }
                             })
@@ -184,15 +161,46 @@ public class AddFragment extends Fragment {
         });
     }
 
-    private void setEndDate(Date endDate) {
-        txtEndDate.setText(DateHelpers.FormatDate(endDate));
-        ExpireDate = endDate;
-    }
+    private final DatePickerDialog.OnDateSetListener onEndDateSet = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, month);
+            myCalendar.set(Calendar.DAY_OF_MONTH, day);
 
-    private void setNotifyDate(Date notifyDate) {
-        txtNotifyDate.setText(DateHelpers.FormatDate(notifyDate));
-        NotifyDate = notifyDate;
-    }
+            txtEndDate.setText(DateHelpers.FormatDate(myCalendar.getTime()));
+            ExpireDate = myCalendar.getTime();
+        }
+    };
+
+    private final DatePickerDialog.OnDateSetListener onNotifyDateSet = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, month);
+            myCalendar.set(Calendar.DAY_OF_MONTH, day);
+
+            final TimePickerDialog.OnTimeSetListener onTimeSet = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                    myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    myCalendar.set(Calendar.MINUTE, minute);
+
+                    txtNotifyDate.setText(DateHelpers.FormatDateTime(myCalendar.getTime()));
+                    NotifyDate = myCalendar.getTime();
+                }
+            };
+
+            // Now open time picker.
+            new TimePickerDialog(
+                getActivity(),
+                onTimeSet,
+                myCalendar.get(Calendar.HOUR_OF_DAY),
+                myCalendar.get(Calendar.MINUTE),
+                true
+            ).show();
+        }
+    };
 
     private void resetView() {
         imgCoupon.setImageResource(android.R.color.transparent);
@@ -201,13 +209,37 @@ public class AddFragment extends Fragment {
         txtEndDate.getText().clear();
         ExpireDate = null;
         NotifyDate = null;
-        currentImageFile = null;
         currentImageUri = null;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    private void createCouponAlarm(long alarmTimeMillis, Coupon coupon) {
+//        final long intervalPeriod=10*1000;
+            AlarmManager alarmManager;
+
+        NotificationChannel notificationChannel;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = new NotificationChannel("default",
+                    "primary", NotificationManager.IMPORTANCE_HIGH);
+
+            assert getActivity() != null;
+            NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            if (manager != null) manager.createNotificationChannel(notificationChannel);
+
+            alarmManager = (AlarmManager) getActivity().getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+            Intent i = new Intent(getActivity().getApplicationContext(), NotificationPublisher.class);
+            i.putExtra("couponName", coupon.Name);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity().getApplicationContext(), 1234,
+                    i, 0);
+
+            assert alarmManager != null;
+            //alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + intervalPeriod, intent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTimeMillis,pendingIntent);
+        }
+    }
+
+    void handlePermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
         if (PermissionHelpers.isPermissionRequestSuccessful(requestCode, permissions, grantResults)){
             // Open camera or gallery.
             ImagePicker.pickImage(getActivity());
@@ -215,7 +247,7 @@ public class AddFragment extends Fragment {
     }
 
 
-    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
+    void handleActivityResult(int requestCode, int resultCode, Intent data) {
 
         // Get image.
         if (resultCode == Activity.RESULT_OK) {
@@ -223,14 +255,14 @@ public class AddFragment extends Fragment {
                 case ImagePicker.GALLERY_REQUEST_CODE:
                     Uri selectedImage = data.getData();
                     imgCoupon.setImageURI(selectedImage);
+                    currentImageUri = data.getData();
                     break;
                 case ImagePicker.CAMERA_REQUEST_CODE:
                     //Uri cameraImage = (Uri)data.getExtras().get(MediaStore.EXTRA_OUTPUT);
                     // Workaround because for some reason the intent data gets deleted after the picture is taken.
                     Uri cameraImage = ImagePicker.currentPhotoUri;
-                    currentImageUri = ImagePicker.currentPhotoUri;
-                    currentImageFile = ImagePicker.currentPhotoFile;
                     imgCoupon.setImageURI(cameraImage);
+                    currentImageUri = ImagePicker.currentPhotoUri;
                     break;
                 default:
                     break;

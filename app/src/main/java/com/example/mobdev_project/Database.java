@@ -47,8 +47,7 @@ class Database {
         if (auth.getCurrentUser() != null) {
             String uid = auth.getCurrentUser().getUid();
 
-            Uri imageUri = Uri.parse(coupon.ImageFile.toURI().toString());
-            String imageName = imageUri.getLastPathSegment();
+            String imageName = coupon.ImageUri.getLastPathSegment();
 
             final DocumentReference couponRef = db.collection(uid).document();
 
@@ -58,7 +57,7 @@ class Database {
                     .child(imageName);
 
             // Task to upload the image.
-            UploadTask storageTask = imageRef.putFile(imageUri);
+            UploadTask storageTask = imageRef.putFile(coupon.ImageUri);
 
             // After the image is uploaded get the download url.
             Task<Uri> uriTask = storageTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
