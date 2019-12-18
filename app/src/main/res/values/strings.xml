@@ -5,7 +5,7 @@
     <string name="Imagedesc_logo_burrow">Logo Burrow</string>
 
     <!-- Navbar -->>
-    <string name="navbar_add">Coupon toevoegen</string>
+    <string name="navbar_add">Toevoegen</string>
     <string name="navbar_coupons">Mijn coupons</string>
     <string name="navbar_account">Account</string>
 

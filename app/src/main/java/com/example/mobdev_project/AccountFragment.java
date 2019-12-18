@@ -82,7 +82,7 @@ public class AccountFragment extends Fragment {
         btnOpenChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Theme_MaterialComponents_Dialog);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ThemeOverlay_MaterialComponents_Dialog);
                 final LayoutInflater inflater = requireActivity().getLayoutInflater();
 
                 final View dialogView = inflater.inflate(R.layout.dialog_change_password, null);
