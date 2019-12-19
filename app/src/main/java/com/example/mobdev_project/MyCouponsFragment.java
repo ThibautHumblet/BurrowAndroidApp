@@ -1,10 +1,17 @@
 package com.example.mobdev_project;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +26,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +63,30 @@ public class MyCouponsFragment extends Fragment implements CouponsAdapter.Coupon
 
     @Override
     public void onClick(View view, int position) {
+        Coupon coupon = adapter.getCoupon(position);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ThemeOverlay_MaterialComponents_Dialog);
+        final LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        final View dialogView = inflater.inflate(R.layout.coupon_image, null);
+
+        TextView CouponName = dialogView.findViewById(R.id.NameCoupon);
+        ImageView CouponImage = dialogView.findViewById(R.id.ImageCoupon);
+
+        CouponName.setText(coupon.Name);
+
+        Picasso.get().load(coupon.ImageDownloadUrl).into(CouponImage);
+        builder.setView(dialogView);
+        builder.setPositiveButton("X", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        final AlertDialog changePasswordDialog = builder.create();
+
+        changePasswordDialog.show();
 
     }
 
